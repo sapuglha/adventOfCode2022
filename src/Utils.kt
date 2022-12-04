@@ -20,3 +20,6 @@ fun String.readFileAsText(): String =
 fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteArray()))
     .toString(16)
     .padStart(32, '0')
+
+/** Converts boolean to 1 if true, 0 if false */
+fun Boolean.toInt() = if (this) 1 else 0
