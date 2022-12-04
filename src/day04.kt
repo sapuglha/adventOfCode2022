@@ -20,10 +20,7 @@ fun main() {
         .map { (elf1, elf2) ->
             (elf1.first <= elf2.first && elf1.last >= elf2.last
                     || elf2.first <= elf1.first && elf2.last >= elf1.last
-                    || elf1.first == elf2.last
-                    || elf1.last == elf2.first
-                    || elf1.first <= elf2.first && elf2.first <= elf1.last
-                    || elf2.first <= elf1.last && elf1.first <= elf2.last)
+                    || elf1.intersect(elf2).isNotEmpty())
         }
         .count { it }
 
