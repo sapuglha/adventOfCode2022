@@ -23,3 +23,7 @@ fun String.md5() = BigInteger(1, MessageDigest.getInstance("MD5").digest(toByteA
 
 /** Converts boolean to 1 if true, 0 if false */
 fun Boolean.toInt() = if (this) 1 else 0
+
+/** Verifies if one range contains the other */
+operator fun IntRange.contains(other: IntRange): Boolean =
+    contains(other.first) && contains(other.last)

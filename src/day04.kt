@@ -9,19 +9,12 @@ fun main() {
 
     fun part1(input: List<String>): Int = input
         .map { getElves(it) }
-        .map { (elf1, elf2) ->
-            (elf1.first <= elf2.first && elf1.last >= elf2.last
-                    || elf2.first <= elf1.first && elf2.last >= elf1.last)
-        }
+        .map { (elf1, elf2) -> elf1.contains(elf2) || elf2.contains(elf1) }
         .count { it }
 
     fun part2(input: List<String>): Int = input
         .map { getElves(it) }
-        .map { (elf1, elf2) ->
-            (elf1.first <= elf2.first && elf1.last >= elf2.last
-                    || elf2.first <= elf1.first && elf2.last >= elf1.last
-                    || elf1.intersect(elf2).isNotEmpty())
-        }
+        .map { (elf1, elf2) -> (elf1.contains(elf2) || elf2.contains(elf1) || elf1.intersect(elf2).isNotEmpty()) }
         .count { it }
 
     "day04".readFileAsLines().let { input ->
