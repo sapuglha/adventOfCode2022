@@ -1,34 +1,29 @@
 fun main() {
-    data class ElfArea(
-        val begin: Int,
-        val end: Int,
-    )
-
-    fun getElves(line: String): Pair<ElfArea, ElfArea> {
+    fun getElves(line: String): Pair<IntRange, IntRange> {
         val (first, second) = line.split(",")
         val (firstBegin, firstEnd) = first.split("-").map(String::toInt)
         val (secondBegin, secondEnd) = second.split("-").map(String::toInt)
 
-        return ElfArea(firstBegin, firstEnd) to ElfArea(secondBegin, secondEnd)
+        return (firstBegin..firstEnd) to (secondBegin..secondEnd)
     }
 
     fun part1(input: List<String>): Int = input
         .map { getElves(it) }
-        .map { elves ->
-            (elves.first.begin <= elves.second.begin && elves.first.end >= elves.second.end
-                    || elves.second.begin <= elves.first.begin && elves.second.end >= elves.first.end)
+        .map { (elf1, elf2) ->
+            (elf1.first <= elf2.first && elf1.last >= elf2.last
+                    || elf2.first <= elf1.first && elf2.last >= elf1.last)
         }
         .count { it }
 
     fun part2(input: List<String>): Int = input
         .map { getElves(it) }
-        .map { elves ->
-            (elves.first.begin <= elves.second.begin && elves.first.end >= elves.second.end
-                    || elves.second.begin <= elves.first.begin && elves.second.end >= elves.first.end
-                    || elves.first.begin == elves.second.end
-                    || elves.first.end == elves.second.begin
-                    || elves.first.begin <= elves.second.begin && elves.second.begin <= elves.first.end
-                    || elves.second.begin <= elves.first.end && elves.first.begin <= elves.second.end)
+        .map { (elf1, elf2) ->
+            (elf1.first <= elf2.first && elf1.last >= elf2.last
+                    || elf2.first <= elf1.first && elf2.last >= elf1.last
+                    || elf1.first == elf2.last
+                    || elf1.last == elf2.first
+                    || elf1.first <= elf2.first && elf2.first <= elf1.last
+                    || elf2.first <= elf1.last && elf1.first <= elf2.last)
         }
         .count { it }
 
