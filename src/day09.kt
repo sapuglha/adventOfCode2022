@@ -1,133 +1,186 @@
-data class HTPosition(
-    var headHorizontal: Int,
-    var headVertical: Int,
-    var tailHorizontal: Int,
-    var tailVertical: Int,
-) {
-    private val visitedPosition = hashMapOf<String, Int>()
-    fun getTailVisitedCount() = visitedPosition.size
+data class KnotPosition(
+    val name: String,
+    var currentH: Int = 0,
+    var currentV: Int = 0,
+)
 
-    private var previousHeadHorizontal = 0
-    private var previousHeadVertical = 0
+fun KnotPosition.move(direction: String) =
+    when (direction) {
+        "U" -> {
+            currentV++
+        }
 
-    fun move(direction: String, count: Int) {
-        repeat(count) {
-            previousHeadHorizontal = headHorizontal
-            previousHeadVertical = headVertical
+        "D" -> {
+            currentV--
+        }
 
-            println("H before: $headHorizontal,$headVertical")
-            println("T before: $tailHorizontal,$tailVertical")
+        "L" -> {
+            currentH--
+        }
 
-            when (direction) {
-                "U" -> {
-                    println("=> H -> UP")
-                    headVertical++
-                }
-
-                "D" -> {
-                    println("=> H -> DOWN")
-                    headVertical--
-                }
-
-                "L" -> {
-                    println("=> H -> LEFT")
-                    headHorizontal--
-                }
-
-                else /*RIGHT*/ -> {
-                    println("=> H -> RIGHT")
-                    headHorizontal++
-                }
-            }
-
-            tailFollow()
-            println("H after: $headHorizontal,$headVertical")
-            println("T after: $tailHorizontal,$tailVertical")
-
-            println("Visited position count: ${visitedPosition.size}")
-//            visitedPosition.forEach {
-//                println("visited position ${it.key} count ${it.value}")
-//            }
-            println("-------")
+        else /*RIGHT*/ -> {
+            currentH++
         }
     }
 
-    private fun tailFollow() {
-        val horizontalDistance = headHorizontal - tailHorizontal
-        val verticalDistance = headVertical - tailVertical
 
-        println("Horizontal distance: $horizontalDistance")
-        println("Vertical distance: $verticalDistance")
+private fun KnotPosition.tailFollow(head: KnotPosition, visitedPositions: HashMap<String, Int>?) {
+    val horizontalDistance = head.currentH - currentH
+    val verticalDistance = head.currentV - currentV
 
-        if (
-            horizontalDistance == -2 && verticalDistance == 1 ||
-            horizontalDistance == -2 && verticalDistance == -1 ||
-            horizontalDistance == -1 && verticalDistance == -2 ||
-            horizontalDistance == 1 && verticalDistance == -2 ||
-            horizontalDistance == 1 && verticalDistance == 2 ||
-            horizontalDistance == -1 && verticalDistance == 2 ||
-            horizontalDistance == 2 && verticalDistance == 1 ||
-            horizontalDistance == 2 && verticalDistance == -1
-        ) { // move diagonal
-            println("=> T -> diagonal")
-            tailHorizontal = previousHeadHorizontal
-            tailVertical = previousHeadVertical
-        } else if (horizontalDistance == 2 && verticalDistance == 0) { // MOVE RIGHT
-            println("=> T -> RIGHT")
-            tailHorizontal++
-        } else if (horizontalDistance == 0 && verticalDistance == 2) {// move up
-            println("=> T -> UP")
-            tailVertical++
-        } else if (horizontalDistance == -2 && verticalDistance == 0) { // move left
-            println("=> T -> LEFT")
-            tailHorizontal--
-        } else if (horizontalDistance == 0 && verticalDistance == -2) { // move down
-            println("=> T -> DOWN")
-            tailVertical--
+    var moved = true
+
+    /*
+
+    E F 0 1 2
+    D - - - 3
+    C - I - 4
+    B - - - 5
+    A 9 8 7 6
+
+    */
+
+    if (horizontalDistance == 0 && verticalDistance == 2) { // 0 - up
+        currentV++
+    } else if (horizontalDistance == 1 && verticalDistance == 2) { // 1
+        currentV++
+        currentH++
+    } else if (horizontalDistance == 2 && verticalDistance == 2) { // 2
+        currentV++
+        currentH++
+    } else if (horizontalDistance == 2 && verticalDistance == 1) { // 3
+        currentH++
+        currentV++
+    } else if (horizontalDistance == 2 && verticalDistance == 0) { // 4 - right
+        currentH++
+    } else if (horizontalDistance == 2 && verticalDistance == -1) { // 5
+        currentH++
+        currentV--
+    } else if (horizontalDistance == 2 && verticalDistance == -2) { // 6
+        currentH++
+        currentV--
+    } else if (horizontalDistance == 1 && verticalDistance == -2) { // 7
+        currentH++
+        currentV--
+    } else if (horizontalDistance == 0 && verticalDistance == -2) { // 8 - down
+        currentV--
+    } else if (horizontalDistance == -1 && verticalDistance == -2) { // 9
+        currentV--
+        currentH--
+    } else if (horizontalDistance == -2 && verticalDistance == -2) { // A
+        currentV--
+        currentH--
+    } else if (horizontalDistance == -2 && verticalDistance == -1) { // B
+        currentH--
+        currentV--
+    } else if (horizontalDistance == -2 && verticalDistance == 0) { // C - left
+        currentH--
+    } else if (horizontalDistance == -2 && verticalDistance == 1) { // D
+        currentH--
+        currentV++
+    } else if (horizontalDistance == -2 && verticalDistance == 2) { // E
+        currentH--
+        currentV++
+    } else if (horizontalDistance == -1 && verticalDistance == 2) { // F
+        currentH--
+        currentV++
+    } else {
+        moved = false
+    }
+
+    if (visitedPositions != null && moved) {
+        val position = "$currentH,$currentV"
+        val currentPosition = visitedPositions[position]
+        if (currentPosition == null) {
+            visitedPositions[position] = 1
         } else {
-            println("==> T -> NO movement")
-        }
-
-        val horizontalDistanceAfter = headHorizontal - tailHorizontal
-        val verticalDistanceAfter = headVertical - tailVertical
-
-        println("H distance after: $horizontalDistanceAfter")
-        println("V distance after: $verticalDistanceAfter")
-
-
-        val position = "$tailHorizontal,$tailVertical"
-        val current = visitedPosition[position]
-        if (current == null) {
-            visitedPosition[position] = 1
-        } else {
-            visitedPosition[position] = current + 1
+            visitedPositions[position] = currentPosition + 1
         }
     }
 }
 
+fun printMap(
+    headTailPosition: MutableList<KnotPosition>,
+    xStart: Int = 0,
+    xEnd: Int = 5,
+    yStart: Int = 0,
+    yEnd: Int = 5
+) {
+    val totalX = xEnd - xStart
+    for (countX in xStart..xEnd) {
+        headTailPosition
+            .filter { it.currentV == totalX - countX }
+            .sortedBy { it.currentH }
+            .also { list ->
+                for (countY in yStart..yEnd) {
+                    val item = list.firstOrNull { it.currentH == countY }
+                    print(item?.name ?: ".")
+                }
+                println()
+            }
+    }
+    println()
+}
+
 fun main() {
-    val headTailPosition = HTPosition(0, 0, 0, 0)
 
     fun part1(input: List<String>): Int {
+        val headTailPosition = mutableListOf(KnotPosition("H"), KnotPosition("T"))
+        val visitedPositions: HashMap<String, Int> = hashMapOf("0,0" to 1)
+
         input.forEach { command ->
+            println("== $command ==")
             val (direction, count) = command.split(" ")
-            headTailPosition.move(direction, count.toInt())
+            repeat(count.toInt()) {
+                headTailPosition.first().move(direction)
+                headTailPosition.last().tailFollow(headTailPosition.first(), visitedPositions)
+                printMap(headTailPosition)
+            }
         }
-        return headTailPosition.getTailVisitedCount()
+        return visitedPositions.count()
     }
 
     fun part2(input: List<String>): Int {
-        return 2
+        val headTailPosition = mutableListOf<KnotPosition>().apply {
+            add(KnotPosition("H"))
+            repeat(9) { index ->
+                add(KnotPosition("${index + 1}"))
+            }
+        }
+
+        val visitedPositions: HashMap<String, Int> = hashMapOf("0,0" to 1)
+
+        input.forEach { command ->
+            println("== $command ==")
+            val (direction, count) = command.split(" ")
+            repeat(count.toInt()) {
+                headTailPosition.first().move(direction)
+                headTailPosition.subList(1, headTailPosition.size).forEachIndexed { index, item ->
+                    val newIndex = index + 1
+                    println("moving tail $newIndex")
+                    if (newIndex == headTailPosition.size - 1) {// last item
+                        item.tailFollow(headTailPosition[newIndex - 1], visitedPositions)
+                    } else {
+                        item.tailFollow(headTailPosition[newIndex - 1], null)
+                    }
+                }
+//                printMap(headTailPosition)
+                printMap(headTailPosition, -5, 16, -11, 15)
+            }
+        }
+        return visitedPositions.count()
     }
 
-//    "day09_test".readFileAsLines().let { input ->
-//        check(part1(input) == 13)
-////        check(part2(input) == 2)
-//    }
+    "day09_test1".readFileAsLines().let {
+        check(part1(it) == 13)
+        check(part2(it) == 1)
+    }
+
+    check(part2("day09_test2".readFileAsLines()) == 36)
 
     "day09".readFileAsLines().let { input ->
         println("\n\n=== Starting actual")
         println("part1: ${part1(input)}")
-//        println("part2: ${part2(input)}")
+        println("part2: ${part2(input)}")
     }
 }
