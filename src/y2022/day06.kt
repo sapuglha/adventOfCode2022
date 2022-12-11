@@ -1,3 +1,7 @@
+package y2022
+
+import readFileAsLines
+
 fun main() {
 
 
@@ -35,7 +39,6 @@ fun main() {
                 aux.addLast(it)
                 count++
 
-                // do we have at least 4?
                 if (aux.size >= 14) {
                     // if there are duplicates, remove first
                     val hasDuplicates: Boolean =
@@ -63,8 +66,7 @@ fun main() {
         return count
     }
 
-
-    "day06".readFileAsLines().let { input ->
+    "y2022/data/day06".readFileAsLines().let { input ->
         println("part1: ${part1(input.first())}")
         println("part2: ${part2(input.first())}")
     }

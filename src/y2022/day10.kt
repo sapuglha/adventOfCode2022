@@ -1,3 +1,6 @@
+package y2022
+
+import readFileAsLines
 import kotlin.text.StringBuilder
 
 fun main() {
@@ -68,12 +71,12 @@ fun main() {
         return 1
     }
 
-    "day10_test".readFileAsLines().let {
+    "y2022/data/day10_test".readFileAsLines().let {
         check(part1(it) == 13140)
         check(part2(it) == 1)
     }
 
-    "day10".readFileAsLines().let { input ->
+    "y2022/data/day10".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }

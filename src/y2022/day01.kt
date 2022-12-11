@@ -1,5 +1,10 @@
+package y2022
+
+import readFileAsLines
+import readFileAsText
+
 fun main() {
-    val fileName = "day01"
+    val fileName = "y2022/data/day01"
 
     fun sumElves(input: List<String>): List<Int> {
         val response: MutableList<Int> = mutableListOf()

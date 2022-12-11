@@ -1,3 +1,6 @@
+package y2022
+
+import readFileAsLines
 import java.lang.IllegalArgumentException
 
 fun main() {
@@ -53,7 +56,7 @@ fun main() {
         }
     }
 
-    "day02".readFileAsLines().let { input ->
+    "y2022/data/day02".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }

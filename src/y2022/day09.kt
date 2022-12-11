@@ -1,3 +1,7 @@
+package y2022
+
+import readFileAsLines
+
 data class KnotPosition(
     val name: String,
     var x: Int = 0,
@@ -144,14 +148,14 @@ fun main() {
         return visitedPositions.count()
     }
 
-    "day09_test1".readFileAsLines().let {
+    "y2022/data/day09_test1".readFileAsLines().let {
         check(part1(it) == 13)
         check(part2(it) == 1)
     }
 
-    check(part2("day09_test2".readFileAsLines()) == 36)
+    check(part2("y2022/data/day09_test2".readFileAsLines()) == 36)
 
-    "day09".readFileAsLines().let { input ->
+    "y2022/data/day09".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }

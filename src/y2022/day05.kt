@@ -1,3 +1,7 @@
+package y2022
+
+import readFileAsLines
+
 fun main() {
 
     /*
@@ -31,7 +35,7 @@ fun main() {
 
     fun getInstructions(input: String): Instructions =
         Instructions(
-            quantity = input.substringAfter("move ").substringBefore(" from ").toInt(),
+            quantity = input.substringAfter("y2022.move ").substringBefore(" from ").toInt(),
             origin = input.substringAfter("from ").substringBefore(" to").toInt(),
             destination = input.substringAfter("to ").toInt(),
         )
@@ -71,7 +75,7 @@ fun main() {
             it.last()
         }
 
-    "day05".readFileAsLines().let { input ->
+    "y2022/data/day05".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }

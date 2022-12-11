@@ -1,3 +1,7 @@
+package y2022
+
+import readFileAsLines
+
 enum class EntryType {
     DIRECTORY,
     FILE,
@@ -198,12 +202,12 @@ fun main() {
         return item.size
     }
 
-    "day07_test".readFileAsLines().let { input ->
+    "y2022/data/day07_test".readFileAsLines().let { input ->
         check(part1(input) == 95437)
         check(part2(input) == 24933642)
     }
 
-    "day07".readFileAsLines().let { input ->
+    "y2022/data/day07".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }

@@ -1,3 +1,7 @@
+package y2022
+
+import readFileAsLines
+
 fun main() {
     fun part1(input: List<String>): Int {
         val map = input.map {
@@ -163,12 +167,12 @@ fun main() {
         return highestScore
     }
 
-    "day08_test".readFileAsLines().let { input ->
+    "y2022/data/day08_test".readFileAsLines().let { input ->
         check(part1(input) == 21)
         check(part2(input) == 8)
     }
 
-    "day08".readFileAsLines().let { input ->
+    "y2022/data/day08".readFileAsLines().let { input ->
         println("part1: ${part1(input)}")
         println("part2: ${part2(input)}")
     }
